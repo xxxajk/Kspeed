@@ -40,7 +40,7 @@ extern "C" {
 
         uint32_t cpu_speed(void) {
                 register uint32_t loopsoff = 0;
-                register int waste;
+                register uint32_t waste;
                 __asm__ volatile ("" :: :);
                 cli();
 
@@ -51,7 +51,12 @@ extern "C" {
                 sei();
                 // compensate for 2MHz. This is the lowest I am willing to go.
                 if(loopsoff < 142858) loopsoff = 142858;
-                return (((loopsoff * 14LU) / 1000000LU)*1000000LU);
+                waste = ((loopsoff * 14LU) / 1000000LU);
+                if(waste & 3) {
+                        // Compensate for pipeline/cache effects.
+                        waste = (((loopsoff * 12.1) / 1000000LU) * 1000000LU);
+                }
+                return (waste * 1000000LU);
         }
 }
 
