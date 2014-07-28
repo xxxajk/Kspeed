@@ -52,7 +52,7 @@ extern "C" {
                 // compensate for 2MHz. This is the lowest I am willing to go.
                 if(loopsoff < 142858) loopsoff = 142858;
                 waste = ((loopsoff * 14LU) / 1000000LU);
-                if(waste & 3) {
+                if(waste & 1) {
                         // Compensate for pipeline/cache effects.
                         waste = (((loopsoff * 12.1) / 1000000LU) * 1000000LU);
                 }
